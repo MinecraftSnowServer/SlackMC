@@ -1,6 +1,5 @@
 package org.circuitsoft.slack.bukkit;
 
-import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,27 +8,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
 import org.eclipse.jetty.util.log.Logger;
 
 public class SlackBukkitGetter {
-    private JavaPlugin plugin;
+    private SlackBukkit plugin;
     private ConfigurationSection configuration;
     private org.bukkit.Server bukkitServer;
     private String token;
     private Server webServer;
 
-    public SlackBukkitGetter(JavaPlugin plugin) {
+    public SlackBukkitGetter(SlackBukkit plugin) {
         this.plugin = plugin;
         this.configuration = plugin.getConfig().getConfigurationSection("incoming-webhook");
         this.bukkitServer = plugin.getServer();
@@ -117,7 +113,7 @@ public class SlackBukkitGetter {
                             } else {
                                 msg = unescapeString(SlackBukkitGetter.this.configuration.getString("msgprefix", "\u00A72[Slack] ")) + username + ": " + unescapeString(SlackBukkitGetter.this.configuration.getString("msgsuffix", "\u00A7f")) + message;
                             }
-                            bukkitServer.broadcastMessage(msg);
+                            plugin.broadcastToBukkit(msg);
                         }
                         response.setStatus(200);
                         baseRequest.setHandled(true);

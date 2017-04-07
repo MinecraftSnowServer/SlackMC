@@ -15,6 +15,7 @@ Spigot/CraftBukkit/Bukkit/BungeeCord/Glowstone plugin for [Slack](https://slack.
 * Formatting (coming soon)
 * Send commands from Slack (coming soon)
 * Sponge (coming soon)
+* Sync messages with [Dynmap](http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1286593-dynmap-dynamic-web-based-maps-for-minecraft) (only for Bukkit/Spigot now)
 
 ##Download
 [Stable builds](http://dev.bukkit.org/bukkit-plugins/slack/files/)

@@ -17,13 +17,15 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
+import org.circuitsoft.slack.bukkit.bridge.DynmapBridge;
 
 public class SlackBukkit extends JavaPlugin implements Listener {
 
 	private static String webhookUrl;
 	private SlackBukkitGetter getter;
 	private List<String> blacklist;
+
+	private DynmapBridge mDynmapBridge;
 
 	@Override
 		public void onEnable() {
@@ -39,6 +41,9 @@ public class SlackBukkit extends JavaPlugin implements Listener {
 				getter = new SlackBukkitGetter(this);
 				getter.run();
 			}
+
+			if (getServer().getPluginManager().isPluginEnabled("dynmap"))
+				mDynmapBridge = DynmapBridge.load(this);
 		}
 
 	@Override
@@ -95,6 +100,12 @@ public class SlackBukkit extends JavaPlugin implements Listener {
 
 	public void send(String message, String name, String iconUrl, Boolean isAction) {
 		new SlackBukkitPoster(this, message, name, iconUrl, isAction).runTaskAsynchronously(this);
+	}
+
+	public void broadcastToBukkit(final String message) {
+		Bukkit.broadcastMessage(message);
+		if (mDynmapBridge != null)
+			mDynmapBridge.broadcast(message);
 	}
 
 	private boolean isAllowed(String command) {
